@@ -16,35 +16,28 @@
 
 ## standard naming conventions:
 short version:
-# origin 	  == our own GitHub repo.
-# upstream 	  == the owner GitHub repo.
-
+### origin 	  == our own GitHub repo.
+### upstream 	  == the owner GitHub repo.
 long version:
-origin   	  == our own remote copy of the project on our GitHub. for contributor's its the fork.
-upstream 	  == the owner repository that we dont have access to (the original project that we fork from).
-note: if we only use single remote - the origin is our only "upstream". 
-but since we have 2 upstream: our own GitHub repo that was forked from owner GitHub repo - by convention "upstream" is the owner remote, and "origin" is our remote.
+* origin   	  == our own remote copy of the project on our GitHub. for contributor's its the fork.
+* upstream 	  == the owner repository that we dont have access to (the original project that we fork from).
+* note: if we only use single remote - the origin is our only "upstream".
+but since we have 2 upstream: our own GitHub repo that was forked from owner GitHub repo - by convention naming is: "upstream" is the owner remote, and "origin" is our remote.
 
-
-
-1. Clone one-time setup 
-do it only after we use GitHub website GUI to fork project:
+---
+---
+* one-time setup:
+1. Fork repositrory with GitHub website GUI (copy from owner to our repo)
+2. Clone our repo to local machine
 ```bash
 git clone https://github.com/YOUR_USER/REPO_FORKED_NAME.git
 cd REPO_FORKED_NAME
-git remote -v   
+git remote -v
 	# should show our remote only.
 git remote add upstream https://github.com/OWNER/REPO.git
-git remote -v   
+git remote -v
 	# verify - now, should show both remotes (our remote(=origin) and owner(=upstream))
 ```
-
-
-
-
-
-
-
 
 2. Must do each time before work - sync local with both remotes ("upstream" and "origin").
 ```bash
@@ -57,14 +50,12 @@ git switch main
 
 git rebase upstream/main # rebase without commit (cleaner history)
 	# bring your local main up to date with owner. we have 2 options - with or without commit:
-	# alternative command (will create merge commit):
+		# alternative command - will do the same (will create merge commit):
 		git merge upstream/main
+		# alternative same command (git pull = git fetch + git merge):
+		git pull upstream main
 
 
-	# alternative same command (git pull = git fetch + git merge):
-	git pull upstream main
-
-	
 git push origin main
 	# update your fork on GitHub (will be ff merge - as local more update than origin)
 	# we might need:
@@ -73,9 +64,7 @@ git push origin main
 	# "--force-with-lease" is safer than "--force" — it refuses to push if someone else updated the branch remotely.
 ```
 
-
-
-3. Push our local feature branch to origin (=fork):
+3. Push our local feature branch to origin (=our fork reository):
 ```bash
 git switch -c feature/my-feature
 	# alternative command (exactly the same - older syntax):
@@ -92,34 +81,36 @@ git commit -m "feat: describe change"
 git push origin feature/my-feature
 		# alternative command (if we didnt set the origin yet...):
 		git push --set-upstream origin feature/my-feature
-			# alternative command (exactly the same - shorter)
-			git push -u origin feature/my-feature
+		# alternative command (exactly the same - shorter)
+		git push -u origin feature/my-feature
 ```
 
-4. push from origin (=our fork) to upstream (=owner)
+4. PR = ask to merge our `origin` (=our fork) repo to `upstream` (=owner) repo
 ## PR (pool request) on GitHub:
 Go to your fork → you'll see "Compare & pull request"
 Target: OWNER/REPO ← YOUR_USER/REPO (branch my-feature)
 Submit PR
 
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
 
+5. solve upstream conflicts (when owner updates remote, and has conflicts with our local):
+* we have 3 options: "fetch & merge", "rebase" and "pull" - they are the same with minor difference. usually experts use rebase as it more clean. but back-merge is safer and create more commits.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-4.2 upstream conflicts (when owner updates remote, and has conflicts with our local):
-(we have 3 options: "fetch & merge", "rebase" and "pull")
 strategy to solve conflict:
 1. abort merge to main
 2. create new branch for merge
@@ -145,7 +136,7 @@ git merge branch_for_merge
 ```
 ```bash # 2nd way "fetch & merge"
 # 2nd way merge:
-git fetch upstream 
+git fetch upstream
 git merge upstream/main
 
 #### here we got "merge conflict error"!!! ####
